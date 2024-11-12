@@ -21,6 +21,15 @@ class API_Notifications(
         # Add empty storage for caching notifications
         self.cached_notifications = dict()
 
+    def plugin_helper_notify(self, data):
+        return self.on_api_command("notify", data)
+
+    def plugin_helper_retrieve(self, data):
+        return self.on_api_command("retrieve", data)
+
+    def plugin_helper_remove(self, data):
+        return self.on_api_command("remove", data)
+
     def send_notification(self, data):
         msg_types = ['notice','error','info','success']
 
@@ -139,6 +148,13 @@ __plugin_pythoncompat__ = ">=3,<4"
 def __plugin_load__():
     global __plugin_implementation__
     __plugin_implementation__ = API_Notifications()
+
+    global __plugin_helpers__
+    __plugin_helpers__ = {        
+        "notify": __plugin_implementation__.plugin_helper_notify,
+        "retrieve": __plugin_implementation__.plugin_helper_retrieve,
+        "remove": __plugin_implementation__.plugin_helper_remove,
+    }
 
     global __plugin_hooks__
     __plugin_hooks__ = {
